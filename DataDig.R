@@ -1,34 +1,23 @@
----
-title: "ST558 Homework 8"
-format: html
-editor: visual
----
 
-```{r}
-#| message: FALSE
-#| echo: FALSE
-#| warning: FALSE
-
-library(janitor)
 library(tidyverse)
+library(janitor)
 bike_data <- read_csv("https://www4.stat.ncsu.edu/online/datasets/SeoulBikeData.csv",locale = locale(encoding = "ISO-8859-1"))
+bike_data <- bike_data %>% janitor::clean_names()
 
-#check for missingness function
+class(bike_data)
+typeof(bike_data)
+
 sum_na <- function(column){
   sum(is.na(column))
 }
+
 na_counts <- bike_data |>
   summarize(across(everything(), sum_na))
+na_counts
 
-#convert the date to be an actual date
+summary(bike_data)
 bike_data$date_new<-as.Date(bike_data$date,format="%m/%d/%y")
-#convert the character vars to factor
 bike_data <- bike_data %>% mutate(across(where(is.character), as.factor))
-
-```
-
-```{r}
 summary(bike_data$rented_bike_count)
-```
 
 
