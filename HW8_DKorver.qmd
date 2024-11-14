@@ -6,7 +6,7 @@ editor: visual
 
 ```{r}
 #| message: FALSE
-#| echo: FALSE
+#| echo: TRUE
 #| warning: FALSE
 
 library(janitor)
@@ -21,7 +21,7 @@ na_counts <- bike_data |>
   summarize(across(everything(), sum_na))
 
 #convert the date to be an actual date
-bike_data$date_new<-as.Date(bike_data$date,format="%m/%d/%y")
+bike_data$date_new<-as.Date(bike_data$Date,format="%m/%d/%y")
 #convert the character vars to factor
 bike_data <- bike_data %>% mutate(across(where(is.character), as.factor))
 
@@ -30,5 +30,3 @@ bike_data <- bike_data %>% mutate(across(where(is.character), as.factor))
 ```{r}
 summary(bike_data$rented_bike_count)
 ```
-
-
