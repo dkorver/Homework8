@@ -51,24 +51,17 @@ bike_data_for_model <- bike_data %>%
 bike_data_for_model_numVars <- bike_data_for_model %>%
   select(-seasons,-holiday,-date_new) 
 
-
-
-
-
 set.seed(123)
 bike_split <- initial_split(bike_data, prop = 0.75, strata = seasons)
 bike_train <- training(bike_split)
 bike_test <- testing(bike_split)
 bike_10_fold <- vfold_cv(bike_train, 10)
 
-
-nrow(cell_train)/nrow(cells)
-cell_train %>% 
-  count(class) %>% 
-  mutate(prop = n/sum(n))
-
-cell_test %>% 
-  count(class) %>% 
-  mutate(prop = n/sum(n))
+MLR_rec1 <- recipe(bike_count ~ ., data = bike_train) |>
+  step_date(date, features = "dow") |>
+  step_mutate(day_type = factor(if_else(date_dow %in% c("Sat", "Sun"), "Weekend", "Weekday"))) |>
+  step_rm(date, date_dow) |>
+  step_dummy(seasons, holiday, day_type) |>
+  step_normalize(all_numeric(), -bike_count)
 
 
